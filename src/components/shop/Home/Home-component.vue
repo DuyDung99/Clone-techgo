@@ -567,4 +567,8 @@ export default {
 .products-box {
     margin-right: 16px;
 }
+
+::v-deep .v-carousel__controls {
+    display: none;
+}
 </style>
