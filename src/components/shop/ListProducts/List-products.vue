@@ -82,19 +82,10 @@
                                         <span style="font-size: 14px"> sản phẩm</span>
                                     </span>
                                     <div class="d-flex justify-space-around">
-                                        <v-menu transition="scale-transition">
-                                            <template v-slot:activator="{ props }">
-                                                <v-btn color="primary" v-bind="props">
-                                                    Scale Transition
-                                                </v-btn>
-                                            </template>
-
-                                            <v-list>
-                                                <v-list-item v-for="(item, i) in items" :key="i">
-                                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                                                </v-list-item>
-                                            </v-list>
-                                        </v-menu>
+                                        <button>aaa</button>
+                                        <ul>
+                                            <li v-for="(items, i) in items" :key="i">{{ items.title }}</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -128,10 +119,9 @@ export default {
             price: ['Dưới 1.000.000đ', '1.000.000đ - 2.000.000đ', '2.000.000đ - 3.000.000đ', '3.000.000đ - 4.000.000đ', 'Trên 4.000.000đ'],
             ex4: ['orange'],
             items: [
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me 2' },
+                { title: 'Sản phẩm nổi bật' },
+                { title: 'Giá Tăng Dần' },
+                { title: 'Giá Giảm Dần' },
             ],
         }
     },
