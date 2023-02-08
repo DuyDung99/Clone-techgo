@@ -19,8 +19,8 @@
                     -{{ data.sale * 100 }}%
                 </span>
             </div>
-
         </div>
+
     </div>
 </template>
 
@@ -29,7 +29,7 @@ import { ProductCard } from '../Data/Data'
 export default {
     data() {
         return {
-            data: ProductCard
+            data: ProductCard,
         }
     },
 
@@ -38,6 +38,9 @@ export default {
     },
 
     methods: {
+        // simple_toggle(default_limit, filters_length) {
+        //     this.limit_by = (this.limit_by === default_limit) ? filters_length : default_limit;
+        // },
         // click(data) {
         //     let number = data.price * data.sale;
         //     console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(number));
@@ -56,7 +59,7 @@ export default {
         priceSale(data) {
             let priceSale = data.sale > 0
             return priceSale
-        }
+        },
 
 
     }
@@ -69,7 +72,7 @@ export default {
 }
 
 .producCard {
-    width: 20%;
+    /* width: 20%; */
     border: 1px solid #ccc;
     box-shadow: 0 5px 10px #ccc;
     margin-top: 12px;
@@ -92,7 +95,7 @@ export default {
 }
 
 .producCard-detail {
-    padding: 24px;
+    padding: 12px;
     position: relative;
 }
 
@@ -120,6 +123,7 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-right: 16px;
 }
 
 .producCard-detail-rate {

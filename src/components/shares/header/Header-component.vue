@@ -7,10 +7,16 @@
             <!-- ---------------------------search------------------------------------- -->
 
             <div class="header-center">
-                <div class="Search">
-                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                <div class="Search" v-click-outside="onClickOutside">
+                    <input @click="onClickSearch" type="text" placeholder="Tìm kiếm sản phẩm...">
                     <div class="header-center-button">
                         <button><i class="fa-sharp fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                    <div v-if="showSearches" class="header-search">
+                        <p>Gợi ý cho bạn:</p>
+                        <ul>
+                            <li v-for="(searchItems, i) in searchItems" :key="i">{{ searchItems }}</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -64,8 +70,19 @@ export default {
     data() {
         return {
             isShow: false,
+            showSearches: false,
+            searchItems: ['điện thoại', 'pc-máy tính đồng bộ', 'laptop & macbook', 'đồng hồ thông minh', 'linh kiện máy tính'],
         }
     },
+    methods: {
+        onClickSearch() {
+            this.showSearches = !this.showSearches;
+        },
+
+        onClickOutside() {
+            this.showSearches = false;
+        },
+    }
 }
 </script>
 
@@ -78,6 +95,29 @@ export default {
     display: flex;
     color: white;
     width: 100%;
+}
+
+.header-search {
+    background-color: white;
+    color: black;
+    position: absolute;
+    top: 101%;
+    width: 90%;
+    margin-bottom: 16px;
+    z-index: 1;
+}
+
+.header-search p {
+    padding: 8px 24px;
+    font-size: 0.9rem;
+    color: #767575fb;
+}
+
+.header-search li {
+    list-style: none;
+    text-transform: capitalize;
+    padding: 6px 32px;
+    font-size: 0.9rem;
 }
 
 .header-left {
@@ -112,13 +152,16 @@ export default {
     width: 90%;
     outline: none;
     border-radius: 10px;
+}
 
+.header-center input:focus {
+    outline: 1px solid #f1c40f;
 }
 
 .header-center-button {
     position: absolute;
     right: 10%;
-    bottom: 17%;
+    bottom: 0;
     color: white;
     background-color: #f39c12;
     padding: 4px 12px;
@@ -211,6 +254,7 @@ export default {
 
 .Search {
     margin-top: 9px;
+    position: relative;
 }
 
 .header-right-address-hover {

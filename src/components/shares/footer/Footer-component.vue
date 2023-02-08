@@ -83,7 +83,6 @@ export default {
 <style scoped>
 .footer {
     margin: 12px 20px;
-    padding: 30px;
     display: flex;
 }
 
@@ -118,6 +117,7 @@ export default {
 
 .footer-content h3 {
     margin-left: 6px;
+    font-size: 1rem;
 }
 
 .footer-ul li {

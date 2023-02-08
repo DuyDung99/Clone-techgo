@@ -20,13 +20,13 @@
                             <a>Laptop Macbook </a>
                             <span><i class="fa-solid fa-angle-right"></i></span>
                         </li>
-                        <li v-for="(items, index) in items" :key="index">{{ items }}</li>
-                        <li class="items-plus" v-if="isShow" @click="showPlus">
-                            <span>+ Xem thêm</span>
-                        </li>
-                        <li v-else class="items-minus" @click="showMinus">
-                            <span>- Ẩn bớt</span>
-                        </li>
+                        <ul v-for="(items, index) in items" :key="index">
+                            <li class="items-plus" v-if="index < limit_by">
+                                {{ items }}
+                            </li>
+                        </ul>
+                        <li class="show-more-less" @click="simple_toggle(default_limit, items.length)">{{
+                        limit_by=== 9 ? '+ Hiện Thêm' : '- Ẩn Bớt'}}</li>
                     </ul>
                 </div>
                 <!-- -------------------------ListTechGo--------------------------------------- -->
@@ -86,6 +86,7 @@ export default {
     },
     data() {
         return {
+            isShow: false,
             showList: false,
             isShowHomeList: false,
             isShowListElectric: false,
@@ -95,6 +96,8 @@ export default {
             listElectric: listElectric,
             listMacbook: listMacbook,
             listCategory: listCategory,
+            default_limit: 9,
+            limit_by: 9,
         }
     },
 
@@ -135,6 +138,14 @@ export default {
             this.isShow = !this.isShow;
         },
 
+        showPlus() {
+            this.isShow = !this.isShow;
+        },
+
+        simple_toggle(default_limit, items) {
+            this.limit_by = (this.limit_by === default_limit) ? items : default_limit;
+        },
+
 
     }
 
@@ -159,9 +170,7 @@ export default {
     box-shadow: 0 1px 2px 0 rgb(60 64 67 / 10%), 0 4px 4px 2px rgb(60 64 67 / 15%);
     border-radius: 4px;
     background-color: white;
-    height: 565px;
-    z-index: 1;
-
+    z-index: 2;
 }
 
 .content-left-items li:hover {
@@ -201,7 +210,7 @@ export default {
     box-shadow: 0 1px 2px 0 rgb(60 64 67 / 10%), 0 4px 4px 2px rgb(60 64 67 / 15%);
     border-radius: 4px;
     background-color: white;
-    height: 565px;
+    height: auto;
     z-index: 1;
 
 }
@@ -304,5 +313,14 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.show-more-less {
+    margin-bottom: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.items-plus {
+    list-style: none;
 }
 </style>
