@@ -2,98 +2,37 @@
     <div class="sign-in">
         <div class="sign-in-box">
             <div class="login-box">
-                <h2>Login</h2>
+                <h2>Admin Shop</h2>
                 <div class="user-box">
-                    <input type="text" name="email" required="" v-model="email" @change="isEmailValid">
-                    <span v-show="wrongEmail">Email không đúng </span>
+                    <input type="text" name="" required="">
                     <label>Email</label>
                 </div>
                 <div class="user-box">
-                    <input type="password" name="password" required="" v-model="password" @change="isPasswordValid"
-                        @keyup.enter="login()">
-                    <span v-if="wrongPw">Mật khẩu phải có ít nhất 8 kí tự, bao gồm 1 chữ hoa,<br> 1 chữ
-                        thường, 1 chữ số, 1 kí
-                        tự đặc biệt</span>
+                    <input type="password" name="" required="">
                     <label>Password</label>
                 </div>
-                <button class="user-a" href="#" @click="login">
+                <a class="user-a" href="#">
                     <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
                     Đăng nhập
-                </button>
-                <div class="sign-up">
-                    <p>Bạn chưa có tài khoản? <router-link to="/SignUp">Đăng ký</router-link></p>
-                    <p>Quên mật khẩu? <a href="">Lấy lại mật khẩu</a></p>
-                </div>
+                </a>
                 <router-link to="/" class="TechGo">
                     <h4>TechGo Shop</h4>
                 </router-link>
             </div>
+            <div class="view-img">
+                <span class="mask bg-gradient-dark"></span>
+            </div>
         </div>
-        <button @click="isEmailValid">a</button>
     </div>
 </template>
 
 <script>
-import { api } from '../../../api.js'
-// import Swal from 'sweetalert2'
 export default {
-    data() {
-        return {
-            email: '',
-            password: '',
-            wrongEmail: false,
-            wrongPw: false,
-        };
-    },
-    components: {
-        // Form,
-        // Field,
-        // ErrorMessage
-    },
 
-    methods: {
-        isEmailValid() {
-            const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-            if (regex.test(this.email)) {
-                this.wrongEmail = false;
-            } else {
-                this.wrongEmail = true;
-            }
-            console.log(regex.test(1));
-        },
-
-        isPasswordValid() {
-            const regexPw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i;
-            if (regexPw.test(this.password)) {
-                this.wrongPw = false;
-            } else {
-                this.wrongPw = true;
-            }
-
-        },
-
-        async login() {
-            try {
-                const res = await api.login(this.email, this.password);
-                if (res.status == 200) {
-                    localStorage.setItem('access_token', res.data.access_token)
-                    // Swal.fire({
-                    //     title: 'Đăng nhập thành công',
-                    //     icon: 'success',
-                    //     confirmButtonText: 'Success',
-                    // })
-                    this.$router.push({ path: '/' })
-                }
-            } catch (error) {
-                this.wrongEmail = true;
-                this.wrongPw = true;
-            }
-        },
-    }
 }
 </script>
 
@@ -105,8 +44,8 @@ export default {
 .sign-in {
     background: linear-gradient(#29323c, #485563);
     position: relative;
-    min-height: 100vh;
-    background-image: url('https://p.w3layouts.com/demos_new/template_demo/28-07-2017/glassy_login_form-demo_Free/1756538463/web/images/bann.jpg');
+
+    background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
     background-size: cover;
 }
 
@@ -119,25 +58,21 @@ export default {
     border-radius: 10px;
     /* background: linear-gradient(#141e30, #243b55); */
     background: transparent;
-
+    position: absolute;
+    z-index: 1;
+    left: 37%;
+    padding-top: 6rem;
 }
 
 .login-box h2 {
     margin: 0 0 30px;
     padding: 0;
-    color: #fff;
+    color: #03e9f4;
     text-align: center;
 }
 
 .login-box .user-box {
     position: relative;
-    margin-bottom: 24px;
-}
-
-.login-box .user-box span {
-    color: red;
-    font-size: 12px;
-    margin: 10px 0;
 }
 
 .login-box .user-box input {
@@ -145,7 +80,7 @@ export default {
     padding: 10px 0;
     font-size: 16px;
     color: #fff;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     border: none;
     border-bottom: 1px solid #fff;
     outline: none;
@@ -165,7 +100,7 @@ export default {
 
 .login-box .user-box input:focus~label,
 .login-box .user-box input:valid~label {
-    top: -30px;
+    top: -20px;
     left: 0;
     color: #03e9f4;
     font-size: 12px;
@@ -181,7 +116,7 @@ export default {
     text-transform: uppercase;
     overflow: hidden;
     transition: .5s;
-    margin-top: 30px;
+    margin-top: 40px;
     letter-spacing: 4px;
     width: 100%;
     border-radius: 4px;
@@ -197,12 +132,12 @@ export default {
         0 0 100px #03e9f4;
 }
 
-.login-box button span {
+.login-box a span {
     position: absolute;
     display: block;
 }
 
-.login-box button span:nth-child(1) {
+.login-box a span:nth-child(1) {
     top: 0;
     left: -100%;
     width: 100%;
@@ -222,7 +157,7 @@ export default {
     }
 }
 
-.login-box button span:nth-child(2) {
+.login-box a span:nth-child(2) {
     top: -100%;
     right: 0;
     width: 2px;
@@ -243,7 +178,7 @@ export default {
     }
 }
 
-.login-box button span:nth-child(3) {
+.login-box a span:nth-child(3) {
     bottom: 0;
     right: -100%;
     width: 100%;
@@ -264,12 +199,12 @@ export default {
     }
 }
 
-.login-box button span:nth-child(4) {
+.login-box a span:nth-child(4) {
     bottom: - 100%;
     left: 0;
     width: 2px;
     height: 100%;
-    /* background: linear-gradient(360deg, transparent, #03e9f4); */
+    background: linear-gradient(360deg, transparent, #03e9f4);
     animation: btn-anim4 1s linear infinite;
     animation-delay: .75s
 }
@@ -302,8 +237,8 @@ export default {
 
 .TechGo {
     position: absolute;
-    top: 5%;
-    left: 7%;
+    top: 1%;
+    left: 1%;
     box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
     padding: 0 6px;
     width: 200px;
@@ -320,5 +255,24 @@ export default {
 
 .TechGo:hover {
     color: #2d98da;
+}
+
+.mask {
+    position: absolute;
+    background-size: cover;
+    background-position: center center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+}
+
+.bg-gradient-dark {
+    background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
+}
+
+.view-img {
+    min-height: 100vh;
 }
 </style>

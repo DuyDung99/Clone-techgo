@@ -2,7 +2,9 @@
     <div class="body-header">
         <div class="header">
             <div class="header-left">
-                <h3>TechGo Shop</h3>
+                <router-link to="/">
+                    <h3>TechGo Shop</h3>
+                </router-link>
             </div>
             <!-- ---------------------------search------------------------------------- -->
 
@@ -43,22 +45,51 @@
                         </div>
                     </button>
                 </div>
-                <div class="header-right-account">
+                <div class="header-right-account" v-if="showUser">
                     <button class="header-right-account-btn">
                         <span><i class="fa-regular fa-circle-user"></i></span>
                         <span class="header-right-span">
-                            <span>Đăng ký / Đăng nhập</span>
+                            <span><router-link to="/SignIn">Đăng nhập / Đăng ký</router-link></span>
                         </span>
                     </button>
                 </div>
-                <div class="header-right-cart">
-                    <button class="header-right-cart-btn">
-                        <span><i class="fa-solid fa-cart-shopping"></i></span>
-                        <span class="header-right-span">
-                            <span>Giỏ hàng</span>
-                            <span class="coutCart">0</span>
+                <!-- ------------------------------show khi user đã đăng nhập---------------------------------- -->
+                <div class="header-right-account" v-else>
+                    <button class="header-right-account-btn user-login">
+                        <span><i class="fa-regular fa-circle-user"></i></span>
+                        <span class="header-right-span user-span">
+                            <span>
+                                <router-link to="/User">
+                                    Tài khoản của <i class="fa-solid fa-chevron-down "></i>
+                                    <p class="text-user">{{ userName.firstname }} {{ userName.lastname }}</p>
+                                </router-link>
+                            </span>
                         </span>
                     </button>
+                    <div class="log-out">
+                        <ul>
+                            <li>
+                                <router-link to="/User">
+                                    Thông tin tài khoản
+                                </router-link>
+                            </li>
+                            <li @click="handleLogOut()">
+                                Đăng xuất
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="header-right-cart">
+                    <router-link to="/cart">
+                        <button class="header-right-cart-btn">
+                            <span><i class="fa-solid fa-cart-shopping"></i></span>
+                            <span class="header-right-span">
+                                <span>Giỏ hàng</span>
+
+                                <span class="coutCart">{{ this.numberCart }}</span>
+                            </span>
+                        </button>
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -66,15 +97,24 @@
     </div>
 </template>
 <script>
+import { api } from '../../../api';
+
 export default {
     data() {
         return {
             isShow: false,
             showSearches: false,
             searchItems: ['điện thoại', 'pc-máy tính đồng bộ', 'laptop & macbook', 'đồng hồ thông minh', 'linh kiện máy tính'],
+            numberCart: 0,
+            showUser: true,
+            userName: {},
         }
     },
     methods: {
+        reload() {
+            location.reload();
+        },
+
         onClickSearch() {
             this.showSearches = !this.showSearches;
         },
@@ -82,7 +122,24 @@ export default {
         onClickOutside() {
             this.showSearches = false;
         },
-    }
+
+        handleLogOut() {
+            localStorage.removeItem('access_token');
+            this.reload()
+        }
+    },
+
+    async created() {
+        const token = localStorage.getItem('access_token');
+        console.log(token);
+        const res = await api.getProfile(token);
+        if (res.status == 200) {
+            this.userName = res.data;
+            this.showUser = false
+            console.log(this.userName);
+        }
+    },
+
 }
 </script>
 
@@ -136,7 +193,7 @@ export default {
 .header-left h3:hover {
     cursor: pointer;
     transition: color 300ms ease;
-    color: #33d9b2;
+    color: #95afc0;
 }
 
 /* --------  */
@@ -253,7 +310,7 @@ export default {
 }
 
 .Search {
-    margin-top: 9px;
+    margin-top: 12px;
     position: relative;
 }
 
@@ -294,6 +351,11 @@ export default {
 }
 
 
+a {
+    text-decoration: none;
+    color: white;
+}
+
 @keyframes animate {
     0% {
         width: 0;
@@ -308,5 +370,65 @@ export default {
         width: 30px;
         height: 30px;
     }
+}
+
+.user-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-login .fa-regular {
+    font-size: 1.5rem;
+}
+
+.user-span {
+    margin-left: 16px;
+}
+
+.text-user {
+    text-align: start;
+}
+
+.fa-chevron-down {
+    margin-left: 6px;
+    padding-top: 6px;
+}
+
+.log-out {
+    position: absolute;
+    right: 10%;
+    top: 100%;
+    width: 11.5%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    color: #2c3e50;
+    background: white;
+    display: none;
+}
+
+.log-out li {
+    list-style: none;
+    padding: 8px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.log-out li:hover {
+    background-color: #2c3e50;
+    color: white;
+    transition: 0.3s;
+}
+
+.log-out a {
+    color: #2c3e50;
+}
+
+.log-out a:hover {
+    color: white;
+}
+
+.header-right-account:hover .log-out {
+    display: inline-block;
 }
 </style>

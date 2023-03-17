@@ -101,13 +101,14 @@
                 <h2>Danh mục nổi bật</h2>
                 <div class="category-item">
                     <div class="category-box" v-for="(listCategory, index) in listCategory" :key="index">
-                        <div class="categoty-img">
-                            <img :src="listCategory.thumb" alt="">
-                        </div>
-                        <div class="category-text">
-                            <p>{{ listCategory.title }}</p>
-                        </div>
-                        <a href=""></a>
+                        <router-link to="/ListProducts">
+                            <div class="categoty-img">
+                                <img :src="listCategory.thumb" alt="">
+                            </div>
+                            <div class="category-text">
+                                <p>{{ listCategory.title }}</p>
+                            </div>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -117,13 +118,11 @@
                 <div class="products-box">
                     <div class="products-items">
                         <h3>Top sản phẩm bán chạy</h3>
-                        <Product></Product>
+                        <Swiper></Swiper>
                     </div>
                 </div>
             </div>
         </div>
-
-
 
         <!-- ---------------------------------------------------------------- -->
 
@@ -136,7 +135,8 @@
 <script>
 import Header from '../../../components/shares/header/Header-component.vue';
 import HeaderList from '../../shares/header/Header-list.vue';
-import Product from '../../shares/product-card/Product-Cart.vue'
+// import Product from '../../shares/product-card/Product-Cart.vue';
+import Swiper from '../../shares/swiper/Swiper-component.vue';
 import Footer from '../../shares/footer/Footer-component.vue';
 import { listCategory } from '../../shares/Data/Data.js'
 
@@ -144,8 +144,9 @@ export default {
     components: {
         Header,
         Footer,
-        Product,
+        // Product,
         HeaderList,
+        Swiper,
 
     },
 
@@ -219,7 +220,7 @@ export default {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 1;
+    z-index: 2;
 }
 
 .home-banner {
@@ -341,6 +342,11 @@ export default {
     font-weight: 500;
 }
 
+.category-box a {
+    text-decoration: none;
+    color: black;
+}
+
 .category-box {
     border: 0.5px solid rgba(0, 0, 0, 0.05);
     width: 14.2859%;
@@ -395,10 +401,27 @@ export default {
 }
 
 ::v-deep .producCard-detail {
-    padding: 24px;
+    padding: 12px;
 }
+
 
 ::v-deep .v-carousel__controls {
     display: none;
+}
+
+::v-deep .v-window--show-arrows-on-hover:hover .v-window__left {
+    background-color: #2C3A47;
+}
+
+::v-deep .v-window--show-arrows-on-hover:hover .v-window__right {
+    background-color: #2C3A47;
+}
+
+::v-deep .mdi-chevron-left::before {
+    color: white;
+}
+
+::v-deep .mdi-chevron-right::before {
+    color: white;
 }
 </style>

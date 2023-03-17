@@ -1,9 +1,8 @@
 <template>
-  <div id="App" @wheel="onWheel">
+  <div id="App">
     <router-view></router-view>
   </div>
-
-</template>
+<!-- <div @wheel="onWheel"></div> --></template>
 
 <script>
 export default {
@@ -22,6 +21,4 @@ export default {
   }
 }
 </script>
-<style>
-
-</style>
+<style></style>

@@ -5,22 +5,29 @@
             <HeaderList></HeaderList>
         </div>
         <div class="user-info">
-            <div class="user-h2">
-                <h2>Tài khoản của bạn</h2>
-            </div>
             <div class="user-info-block">
                 <div class="user-info-left">
                     <h4>Tài khoản</h4>
                     <ul>
-                        <li @click="selected = 'Acount'">Thông tin tài khoản</li>
-                        <li @click="selected = 'ListAdress'">Danh sách địa chỉ</li>
+                        <li @click="selected = 'Acount'" :class="selected == 'Acount' ? 'info-color' : ''">Thông tin tài
+                            khoản
+                        </li>
+                        <li @click="selected = 'ListAdress'" :class="selected == 'ListAdress' ? 'info-color' : ''">Danh sách
+                            địa
+                            chỉ</li>
+                        <li @click="selected = 'OderDetail'" :class="selected == 'OderDetail' ? 'info-color' : ''">Chi tiết
+                            đơn
+                            hàng</li>
                         <li>Đăng xuất</li>
                     </ul>
                 </div>
                 <div class="user-info-right">
-                    <component :is="selected"></component>
+                    <component :is="selected" :userData="userData"></component>
                 </div>
             </div>
+        </div>
+        <div>
+            <Footer></Footer>
         </div>
     </div>
 </template>
@@ -30,23 +37,49 @@ import Header from '../../shares/header/Header-component.vue';
 import HeaderList from '../../shares/header/Header-list.vue';
 import Acount from '../user/Account-component.vue';
 import ListAdress from '../user/Lits-address-component.vue';
+import Footer from '../../shares/footer/Footer-component.vue'
+import OderDetail from '../../shop/user/OderDetail-component.vue'
+
 export default {
     components: {
         Header,
         HeaderList,
         Acount,
         ListAdress,
+        Footer,
+        OderDetail,
     },
 
     data() {
         return {
             selected: 'Acount',
+            userData: {
+                email: '',
+                address: '',
+                firstname: '',
+                lastname: '',
+                phone_number: '',
+            },
         }
-    }
+    },
+
+    // async created() {
+    //     const token = localStorage.getItem('access_token');
+    //     console.log(token);
+    //     const res = await api.getProfile(token);
+    //     if (res.status == 200) {
+    //         this.userData = res.data;
+    //         console.log(this.userData);
+    //     }
+    // },
 }
 </script>
 
 <style scoped>
+.info-color {
+    background-color: #95959585;
+}
+
 .user-info {
     background-color: #e7e6e685;
     padding: 60px 0;
@@ -60,30 +93,9 @@ export default {
 
 }
 
-.user-h2 {
-    margin-bottom: 24px;
-}
-
-.user-h2 h2 {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    font-weight: 600;
-}
-
-.user-h2::after {
-    content: '';
-    width: 80px;
-    height: 2px;
-    background-color: black;
-    position: absolute;
-    right: 48%;
-    top: 43%;
-}
-
 .user-info-left {
-    padding: 50px;
-    width: 30%;
+    padding: 60px 50px;
+    width: 25%;
 }
 
 .user-info-left h4 {
@@ -104,6 +116,12 @@ export default {
 }
 
 .user-info-right {
-    width: 70%;
+    width: 75%;
+    border-left: 1px solid #eae4e8;
+}
+
+::v-deep .header-left a {
+    text-decoration: none;
+    color: white;
 }
 </style>

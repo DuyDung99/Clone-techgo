@@ -26,7 +26,7 @@
                             </li>
                         </ul>
                         <li class="show-more-less" @click="simple_toggle(default_limit, items.length)">{{
-                        limit_by=== 9 ? '+ Hiện Thêm' : '- Ẩn Bớt'}}</li>
+                            limit_by === 9 ? '+ Hiện Thêm' : '- Ẩn Bớt' }}</li>
                     </ul>
                 </div>
                 <!-- -------------------------ListTechGo--------------------------------------- -->
@@ -154,7 +154,7 @@ export default {
 
 <style scoped>
 .home-content {
-    padding: 0 56px;
+    padding: 5px 56px;
     display: flex;
 }
 

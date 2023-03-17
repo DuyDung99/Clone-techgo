@@ -41,12 +41,16 @@
                                     <div class="product-box">
                                         <div class="product-portfolio">
                                             <div class="product-h4">
-                                                <h4>Nhà Cung cấp</h4>
+                                                <h4 @click="click">Nhà Cung cấp</h4>
                                             </div>
-                                            <ul v-for="(manufacture, i) in manufacture" :key="i">
+                                            <ul v-for="(brand, i) in menuBrand" :key="i">
                                                 <li>
-                                                    <input type="checkbox" :value="manufacture[i]">
-                                                    <span> {{ manufacture }}</span>
+                                                    <input type="checkbox" :value="brand" v-model="selectedBrand"
+                                                        @click="filterBrands(brand.id, $event)">
+                                                    <span> {{ brand.name }}</span>
+
+                                                    <!-- <span> {{ brand }}</span> -->
+
                                                 </li>
                                             </ul>
                                         </div>
@@ -60,7 +64,8 @@
                                             </div>
                                             <ul v-for="(price, i) in price" :key="i">
                                                 <li>
-                                                    <input type="checkbox"> <span>{{ price }}</span>
+                                                    <input type="checkbox" :value="price">
+                                                    <span>{{ price }}</span>
                                                 </li>
 
                                             </ul>
@@ -80,7 +85,7 @@
                                 <div class="products-promotion">
                                     <h3>Tất cả sản phẩm</h3>
                                     <span style="width:60%">
-                                        <span style="font-weight: bold;">46</span>
+                                        <span style="font-weight: bold;">{{ tatalProducs }}</span>
                                         <span style="font-size: 14px"> sản phẩm</span>
                                     </span>
                                     <div class="products-content">
@@ -90,19 +95,22 @@
                                             <span><i class="fa-solid fa-sort-down"></i></span>
                                         </p>
                                         <ul class="products-filter">
-                                            <li v-for="(items, i) in items" :key="i">{{ items.title }}</li>
+                                            <li v-for="(items, i) in items" :key="i" @click="handaleFilterItem()">{{
+                                                items.title }}</li>
                                         </ul>
                                     </div>
                                 </div>
                                 <!-- ------------------------------------------------------------------>
 
                                 <div class="products-cart">
-                                    <div class="aaa">
-                                        <ProductCart></ProductCart>
+                                    <div>
+                                        <ProductCart :products="products" :paginatedItems="paginatedItems">
+                                        </ProductCart>
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <v-pagination v-model="page" :length="4" rounded="circle"></v-pagination>
+                                    <v-pagination v-model="page" :length="4" rounded="circle"
+                                        @update:modelValue="updatePage(page, size)"></v-pagination>
                                 </div>
                             </div>
                         </div>
@@ -116,13 +124,18 @@
             <Footer></Footer>
         </div>
     </div>
+    <!-- <button @click="overlay = !overlay">click</button> -->
 </template>
 
 <script>
 import Header from '../../shares/header/Header-component.vue';
 import HeaderList from '../../shares/header/Header-list.vue';
-import ProductCart from '../../shares/product-card/Product-Cart.vue'
-import Footer from '../../shares/footer/Footer-component.vue'
+import ProductCart from '../../shares/product-card/Product-Cart.vue';
+import Footer from '../../shares/footer/Footer-component.vue';
+// import Products from '../../shares/products.json'
+import { api } from '../../../api';
+
+
 export default {
     components: {
         Header,
@@ -133,11 +146,15 @@ export default {
 
     data() {
         return {
+            // products: Products,
+            products: [],
             page: 1,
+            size: 3,
             panel: [0, 1],
             readonly: false,
-            manufacture: ['Apple', 'Oppo', 'LG', 'Xiaomi', 'Sam sung',],
-            price: ['Dưới 1.000.000đ', '1.000.000đ - 2.000.000đ', '2.000.000đ - 3.000.000đ', '3.000.000đ - 4.000.000đ', 'Trên 4.000.000đ'],
+            brands: ['Apple', 'Sam sung', 'Sony', 'LG', 'Oppo', 'Lenovo', 'Nokia', 'Xiaomi'],
+            menuBrand: '',
+            price: ['Dưới 2.000.000đ', '2.000.000đ - 5.000.000đ', '5.000.000đ - 15.000.000đ', '15.000.000đ - 30.000.000đ', 'Trên 30.000.000đ'],
             ex4: ['orange'],
             items: [
                 { title: 'Sản phẩm nổi bật' },
@@ -146,14 +163,113 @@ export default {
                 { title: 'Tên A - Z' },
                 { title: 'Tên Z - A' },
             ],
+            selectedBrand: [],
+            selectedPrice: [],
         }
     },
     methods: {
+        click() {
+            // console.log(this.products, 'product');
+            console.log(this.menuBrand);
+        },
+
+        //--reload lại component
+        reload() {
+            location.reload();
+        },
+
+        //-------re-render products
+        async renderProducts(id, skip, limit) {
+            try {
+                const token = localStorage.getItem('access_token');
+                const res = await api.getProducts(token, id, skip, limit);
+                if (res.status == 200) {
+                    this.products = res.data
+                    console.log(this.products = res.data);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async updatePage(page, size) {
+            console.log('page', page);
+            const skip = (page - 1) * size;
+            const limit = size
+            this.renderProducts(null, skip, limit)
+        },
+
+        async filterBrands(id, e) {
+            const skip = (this.page - 1) * this.size
+            const limit = this.size
+            console.log(id);
+            try {
+                if (e.target.checked == true) {
+                    this.renderProducts(id, skip, limit)
+                }
+                if (e.target.checked !== true) {
+                    console.log(id);
+                    this.renderProducts(null, skip, limit)
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         // formatPrice(price) {
         //     console.log(price);
         //     return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(price);
         // },
-    }
+
+        handaleFilterItem(items) {
+            console.log(items);
+        },
+
+
+
+    },
+
+    computed: {
+        tatalProducs() {
+            let tatal = this.products
+            return tatal.length
+        },
+
+        paginatedItems() {
+            const startIndex = (this.page - 1) * this.size;
+            const endIndex = startIndex + this.size;
+            return this.products.slice(startIndex, endIndex);
+        },
+
+        totalPages() {
+            console.log('totalPages', this.renderProducts.length);
+            return this.renderProducts.length;
+        }
+    },
+
+    async created(id) {
+
+        //------products
+        this.renderProducts(id, 0, this.size);
+
+        // ----brands
+        const token = localStorage.getItem('access_token');
+        const resBrand = await api.getBrand(token);
+        if (resBrand.status == 200) {
+            this.menuBrand = resBrand.data
+        }
+
+        // console.log(this.$store)
+    },
+
+    watch: {
+        overlay(val) {
+            console.log(val);
+            val && setTimeout(() => {
+                this.overlay = false
+            }, 1000)
+        },
+    },
 
 }
 </script>
@@ -289,7 +405,7 @@ export default {
 }
 
 .products-promotion h3 {
-    margin-right: 24px;
+    /* margin-right: 24px; */
     display: flex;
     align-items: center;
     width: 20%;
@@ -315,6 +431,10 @@ export default {
     top: 22%;
 }
 
+.products-cart {
+    min-height: 80vh;
+}
+
 ::v-deep .product {
     flex-wrap: wrap;
 }
@@ -323,7 +443,16 @@ export default {
     min-height: 0 !important;
 }
 
-::v-deep .v-pagination__list {
+/* ::v-deep .v-pagination__list {
     justify-content: right;
+} */
+
+::v-deep .producCard {
+    width: 16.9%;
+}
+
+::v-deep .header-left a {
+    text-decoration: none;
+    color: white;
 }
 </style>
